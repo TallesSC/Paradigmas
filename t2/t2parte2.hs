@@ -49,7 +49,7 @@ dec2bin num = reverse (dec2bin' num)
 isHexAux :: Char -> Bool 
 isHexAux c
     | c >= '0' && c <= '9' = True
-    | c >= 'a' && c <= 'f' = True
+    | (toLower c) >= 'a' && (toLower c) <= 'f' = True
     | otherwise = False
 
 isHex :: String -> Bool
