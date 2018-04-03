@@ -30,7 +30,8 @@ auxBin2Dec bit exp = (head bit)*(2^exp) + auxBin2Dec (tail bit) (exp-1)
 --4
 --Reescreva a função do exercício anterior de forma não-recursiva, usando funções pré-definidas em Haskell. Dê outro nome para a função (por exemplo, bin2dec').
 
---bin2dec' :: [Int] -> Int
+bin2dec' :: [Int] -> Int
+bin2dec' bin = sum (zipWith (*) bin (reverse [2^x | x <- [0..(length bin)-1]]))
 
 --5
 --Crie uma função recursiva dec2bin :: Int -> [Int] que receba um número inteiro positivo e retorne sua representação em binário, sob forma de uma lista de 0's e 1's. As funções auxiliares autorizadas aqui são mod, div e reverse.
