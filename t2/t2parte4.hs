@@ -25,28 +25,23 @@ table = [14.6, 1.0, 3.9, 5.0, 12.6, 1.0, 1.3, 1.3, 6.2, 0.4, 0.1, 2.8, 4.7,
 -- Distancia entre 2 listas de frequencia
 chi2 :: [Float] -> [Float] -> Float
 chi2 os es = sum [((o-e)^2)/e | (o,e) <- zip os es]
-
--- Use esta funcao para decodificar uma mensagem!
---crack :: String -> String
---crack cs = encodeStr cs (-factor)
---           where factor = head (positions (minimum chitab) chitab)
---                 chitab = [ chi2 (rotate n table' ) table | n <- [0..25] ]
---                 table' = freqs cs
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
 
 --1
 --Usando encodeChar e decodeChar, defina uma função shiftChar :: Char -> Int -> Char. Essa função, ao receber um caracter de 'a' a 'z', aplicará um deslocamento de 'n' unidades sobre ele, produzindo outro caracter no intervalo ['a'..'z'].
 
---shiftCharAux :: Char -> Int -> Char
---shiftCharAux c n = decodeChar (((encodeChar c) + n) `mod` (encodeChar 'z' + 1))
-                 
---shiftChar :: Char -> Int -> Char
---shiftChar c n = if isUpper c || c == '' then c else shiftCharAux c n
+shiftChar :: Char -> Int -> Char
+shiftChar c n 
+    | (encodeChar c > 25) || (encodeChar c < 0) = c
+    | ((encodeChar c) + n) > 25 = decodeChar (((encodeChar c) + n) `mod` (encodeChar 'z' + 1))
+    | n <= 25 = decodeChar (encodeChar (c) + n)
 
 --2
 --Usando shiftChar, defina uma função encodeStr :: String -> Int -> String que codifique uma string usando um dado deslocamento.
 
---encodeStr :: String -> Int -> String
---encodeStr string n = map shiftChar shiftChar n
+encodeStr :: String -> Int -> String
+encodeStr string n = map (\x -> shiftChar x n) string
 
 --3
 --Defina uma função countValids :: String -> Int, que receba uma string e retorne a quantidade de seus caracteres contidos no intervalo ['a'..'z'].
@@ -77,26 +72,10 @@ freqs string = map (\x -> percent (countChar x string) (countValids string)) ['a
 --6
 --Defina uma função positions :: Float -> [Float] -> [Int], que retorne uma lista de posições de um dado número em uma lista. Considere que as posições comecem em zero. Use a função zip como auxiliar no seu código.
 
---positions :: Float -> [Float] -> [Int]
---positions
+aux list = zip [0..(length list)] list
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+positions :: Float -> [Float] -> [Int]
+positions n list = fst(unzip (filter ((==n).snd) (aux list)))
 
 
 
