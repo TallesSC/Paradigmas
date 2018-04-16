@@ -21,3 +21,40 @@ potN0(N,L) :-
     A is 2**N,
     N1 is N-1,
     potN0(N1,T).
+    
+% 5.Defina um predicado zipmult(L1,L2,L3), de forma que cada elemento da lista L3 seja o produto dos elementos de L1 e L2 na mesma posição do elemento de L3.
+zipmult([],[],[]).
+zipmult(L1,L2,L3) :-
+    L1 = [A|T],
+    L2 = [B|K],
+    X is A*B,
+    L3 = [X|Y],
+    zipmult(T,K,Y).
+
+% 6.Defina um predicado potencias(N,L), de forma que L seja uma lista com as N primeiras potências de 2, sendo a primeira 2^0 e assim por diante.
+potencias2(E,E,[]).
+potencias2(E,N,L) :-
+    H is 2**E,
+    L = [H|T],
+    E1 is E+1,
+    potencias2(E1,N,T).
+potencias(N,L) :-
+    potencias2(0,N,L).
+ 
+% 7. Defina um predicado positivos(L1,L2), de forma que L2 seja uma lista só com os elementos positivos de L1.
+% ------ INCOMPLETO ------
+positivos([],[]).
+positivos(L1,L2) :-
+    L1 = [H|T],
+	H > 0,
+    X is H,
+   	L2 = [X|Y],
+    positivos(T,Y).
+
+% 8.Considere que L1 e L2 sejam permutações de uma lista de elementos distintos, sem repetições. Sabendo disso, defina um predicado mesmaPosicao(A,L1,L2) para verificar se um elemento A está na mesma posição nas listas L1 e L2. 
+%mesmaPosicao(_,[],[]).
+mesmaPosicao(A,[A|_],[A|_]).
+mesmaPosicao(A,L1,L2) :-
+    L1 = [_|Y],
+    L2 = [_|N],
+    mesmaPosicao(A,Y,N).
