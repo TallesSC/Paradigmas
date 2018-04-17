@@ -42,14 +42,18 @@ potencias(N,L) :-
     potencias2(0,N,L).
  
 % 7. Defina um predicado positivos(L1,L2), de forma que L2 seja uma lista só com os elementos positivos de L1.
-% ------ INCOMPLETO ------
 positivos([],[]).
 positivos(L1,L2) :-
     L1 = [H|T],
-	H > 0,
+    H > 0,
     X is H,
-   	L2 = [X|Y],
+    L2 = [X|Y],
     positivos(T,Y).
+    
+positivos(L1,L2) :-
+    L1 = [_|T],
+    positivos(T,L2).
+
 
 % 8.Considere que L1 e L2 sejam permutações de uma lista de elementos distintos, sem repetições. Sabendo disso, defina um predicado mesmaPosicao(A,L1,L2) para verificar se um elemento A está na mesma posição nas listas L1 e L2. 
 %mesmaPosicao(_,[],[]).
@@ -58,3 +62,26 @@ mesmaPosicao(A,L1,L2) :-
     L1 = [_|Y],
     L2 = [_|N],
     mesmaPosicao(A,Y,N).
+
+
+% 9.Dada uma lista de N alunos, deseja-se escolher NP alunos (NP < N) para formar uma comissão. Para isso, defina um predicado comissao(NP,LP,C), que permita gerar as possíveis combinações C com NP elementos da lista LP.
+comissao(0,_,[]).
+comissao(NP,LP,C) :-
+    C = [H|T],
+	NP > 0,
+    NP2 is NP-1,
+    comissao2(H,LP,Z),
+    comissao(NP2,Z,T).
+
+comissao2(A,[A|B],B).
+comissao2(X,[_|B],R) :- 
+    comissao2(X,B,R).
+
+% 10.
+azulejos(1,1).
+azulejos(0,0).
+azulejos(NA,NQ) :-
+    X is floor(sqrt(NA))**2,
+    NA2 is NA-X,
+    azulejos(NA2,NQ2),
+    NQ is NQ2+1.
