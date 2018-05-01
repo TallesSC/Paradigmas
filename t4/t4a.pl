@@ -57,7 +57,14 @@ r5(M) :-
 r6(M,K) :-
     member(K,M),
     isRock(K).
-	
+
+questao11(M) :-
+    M = [t,w,v,s,y,x,z];
+    M = [v,y,t,s,w,z,x];
+    M = [x,y,w,s,t,z,s];
+    M = [y,t,w,s,x,z,v];
+    M = [z,t,x,w,v,y,s].
+
 cdindependente(M) :-
     M = [_,_,_,_,_,_,_],
     r0(M),
@@ -66,8 +73,9 @@ cdindependente(M) :-
     r3(M),
     r4(M),
     r5(M),
-    r6(M,z).
-    
+    r6(M,z),
+	questao11(M).
+
 %  Questão 11. Qual das seguintes alternativas poderia
 % ser a ordem das músicas no CD, da primeira
 % para a sétima faixa?
@@ -77,3 +85,8 @@ cdindependente(M) :-
 % (C) X, Y, W, S, T, Z, S
 % (D) Y, T, W, S, X, Z, V  [CORRETA]
 % (E) Z, T, X, W, V, Y, S    
+% 
+    
+    
+    
+    
