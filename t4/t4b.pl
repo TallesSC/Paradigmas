@@ -13,8 +13,8 @@
 % Questão anulada, resposta correta deveria ser: R$ 185.
 
 cerca(C,P) :-
-    T is (P-1)*3,
-  	Cp is P*10,
-	  Ct is T*5,
-    C is Cp + Ct.
+	T is (P-1)*3,
+	Cp is P*10,
+	Ct is T*5,
+	C is Cp + Ct.
 
