@@ -11,35 +11,53 @@
 % no CD cada sucesso de rock toca imediatamente após uma composição da banda).
 %  6. Z é um sucesso de rock.
 
+isRock(_).
+isComp(_).
+
 r0(M) :-
-    member(mus(s,comp),M) ; member(mus(s,rock),M),
-    member(mus(t,comp),M) ; member(mus(t,rock),M),
-    member(mus(v,comp),M) ; member(mus(v,rock),M),
-    member(mus(w,comp),M) ; member(mus(w,rock),M),
-    member(mus(x,comp),M) ; member(mus(x,rock),M),
-    member(mus(y,comp),M) ; member(mus(y,rock),M),
-    member(mus(z,rock),M).
-    
+    member(s,M),
+    member(t,M),
+    member(v,M),
+    member(w,M),
+    member(x,M),
+    member(y,M),
+    member(z,M),
+    isRock(s) ; isComp(s),
+    isRock(t) ; isComp(t),
+    isRock(v) ; isComp(v),
+    isRock(w) ; isComp(w),
+    isRock(x) ; isComp(x),
+    isRock(y) ; isComp(y),
+    isRock(z) ; isComp(z).
+
 r1(M) :-
-    nth1(4,M,mus(s,_)).
+    nth1(4,M,s).
 
 r2(M) :-
-    Pw < 4,
-    Py < 4,
-    nth1(Pw,M,mus(w,_)),
-    nth1(Py,M,mus(y,_)).
+    nth1(Ps,M,s),
+    nth1(Pw,M,w),
+    nth1(Py,M,y),
+    Pw < Ps,
+    Py < Ps.
 	
 r3(M) :-
-    nth1(Pw,M,mus(w,_)),
-    Pt < Pw,
-    nth1(Pt,M,mus(t,_)).
+    nth1(Pw,M,w),
+    nth1(Pt,M,t),
+    Pt < Pw.
 
 r4(M) :-
-    nth1(6,M,mus(_,rock)).
+    nth1(6,M,A),
+    isRock(A).
 
 r5(M) :-
-    nextto(mus(_,comp), mus(_,rock), M).
+    isRock(A),
+    isComp(B),
+    nextto(B,A,M).
 
+r6(M,K) :-
+    member(K,M),
+    isRock(K).
+	
 cdindependente(M) :-
     M = [_,_,_,_,_,_,_],
     r0(M),
@@ -47,4 +65,15 @@ cdindependente(M) :-
     r2(M),
     r3(M),
     r4(M),
-    r5(M).
+    r5(M),
+    r6(M,z).
+    
+%  Questão 11. Qual das seguintes alternativas poderia
+% ser a ordem das músicas no CD, da primeira
+% para a sétima faixa?
+%
+% (A) T, W, V, S, Y, X, Z
+% (B) V, Y, T, S, W, Z, X
+% (C) X, Y, W, S, T, Z, S
+% (D) Y, T, W, S, X, Z, V  [CORRETA]
+% (E) Z, T, X, W, V, Y, S    
