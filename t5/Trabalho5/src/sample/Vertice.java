@@ -16,8 +16,19 @@ public class Vertice {
         this.connections.add(vizinho);
     }
 
-    public Circle getC() {
-        return circ;
+    public Circle getCircle() { return circ; }
+
+    public double getRadius(){
+        return this.circ.getRadius();
     }
+
+    public double getCircX(){
+        return this.circ.getCenterX();
+    }
+
+    public double getCircY(){
+        return this.circ.getCenterY();
+    }
+
 }
 
