@@ -2,12 +2,18 @@ package sample;
 
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-
+import javafx.scene.paint.Paint;
+import javafx.scene.paint.Color;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.LinkedList;
+import javax.swing.JFileChooser;
 import java.lang.Math;
 import java.awt.geom.Line2D;
+import java.io.File;
+import javafx.stage.FileChooser;
+import javax.swing.JFrame;
 import java.io.PrintWriter;
 
 public class Grafo {
@@ -99,15 +105,43 @@ public class Grafo {
     public void criaSVGfile(){
 
         try {
-            PrintWriter writer = new PrintWriter("resultado.svg", "UTF-8");
+            JFrame parentFrame = new JFrame();
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Escolha o destino do arquivo");
+            fileChooser.setSelectedFile(new File("grafoSVG"));
+            int userSelection = fileChooser.showSaveDialog(parentFrame);
+            File mapa = new File(fileChooser.getSelectedFile()+".html");
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                //File fileToSave = mapa;
+                System.out.println("Save as file: " + mapa.getAbsolutePath());
+            }
+            PrintWriter writer = new PrintWriter(mapa);
             writer.println("<html>");
             writer.println("<body>");
-            writer.println("<svg height=\"800\" width=\"600\">");
+            writer.println("<svg height=\"1000\" width=\"800\">");
             for (Aresta refA: this.arestas){
-                writer.println("<line x1=\""+refA.getIni().getCircX()+"\" y1=\""+refA.getIni().getCircY()+"\" x2=\""+refA.getFim().getCircX()+"\" y2=\""+refA.getFim().getCircY()+"\" style=\"stroke: rgb(255,0,0);stroke-width:"+refA.getLinha().getStrokeWidth()+"\" />");
+                Paint aColor = refA.getLinha().getStroke();
+                Color c = Color.valueOf(aColor.toString());
+                String hex = String.format( "#%02X%02X%02X",
+                        (int)( c.getRed() * 255 ),
+                        (int)( c.getGreen() * 255 ),
+                        (int)( c.getBlue() * 255 ) );
+                writer.println("<line stroke-linecap=\"round\" stroke-dasharray=\""+refA.getLinha().getStrokeDashArray().get(0)+","+refA.getLinha().getStrokeDashArray().get(1)+"\"  x1=\""+refA.getIni().getCircX()+"\" y1=\""+refA.getIni().getCircY()+"\" x2=\""+refA.getFim().getCircX()+"\" y2=\""+refA.getFim().getCircY()+"\" style=\"stroke-width: "+refA.getLinha().getStrokeWidth()+";stroke: "+hex+"\" />");
             }
             for (Vertice refV: this.vertices){
-                writer.println("<circle cx=\""+refV.getCircX()+"\" cy=\""+refV.getCircY()+"\" r=\""+refV.getRadius()+"\" stroke=\"green\" stroke-width=\""+refV.getCircle().getStrokeWidth()+"\" fill=\"\" />");
+                Paint vColor = refV.getCircle().getFill();
+                Color cV = Color.valueOf(vColor.toString());
+                String hexV = String.format( "#%02X%02X%02X",
+                        (int)( cV.getRed() * 255 ),
+                        (int)( cV.getGreen() * 255 ),
+                        (int)( cV.getBlue() * 255 ) );
+                Paint strokeColor = refV.getCircle().getStroke();
+                Color cS = Color.valueOf(strokeColor.toString());
+                String hexS = String.format( "#%02X%02X%02X",
+                        (int)( cS.getRed() * 255 ),
+                        (int)( cS.getGreen() * 255 ),
+                        (int)( cS.getBlue() * 255 ) );
+                writer.println("<circle cx=\""+refV.getCircX()+"\" cy=\""+refV.getCircY()+"\" r=\""+refV.getRadius()+"\" stroke=\""+hexS+"\" stroke-width=\""+refV.getCircle().getStrokeWidth()+"\" fill=\""+hexV+"\" />");
             }
             writer.println("</svg>");
             writer.println("</body>");

@@ -62,8 +62,9 @@ public class GraphsEditor extends Application {
         Pane canvas = new Pane();
         ToolBar tbTop = new ToolBar();
         ToolBar tbLeft = new ToolBar();
-        HBox infoBox = new HBox();
         tbLeft.setOrientation(Orientation.VERTICAL);
+        HBox infoBox = new HBox();
+        infoBox.setStyle("-fx-background-color: #E0E0E0;");
 
         // Botões superiores //
         //
@@ -148,6 +149,7 @@ public class GraphsEditor extends Application {
         infoBox.getChildren().add(t3);
         infoBox.getChildren().add(nI);
         infoBox.getChildren().add(8, separator3);
+
 
         btnNew.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -256,8 +258,10 @@ public class GraphsEditor extends Application {
                         l.setStroke(colorPicker.getValue());
                         l.setStrokeWidth(slider.getValue());
                         l.setStrokeLineCap(StrokeLineCap.ROUND);
+                        l.getStrokeDashArray().addAll(1.0, 0.0);
                         if (tiposArestas.getSelectedToggle() == tracejado){
-                            l.getStrokeDashArray().addAll(15.0, 30.0);
+                            l.getStrokeDashArray().set(0, 15.0);
+                            l.getStrokeDashArray().set(1, 30.0);
                         }
                         canvas.getChildren().add(0,l);
                     }
@@ -310,8 +314,3 @@ public class GraphsEditor extends Application {
         launch(args);
     }
 }
-
-// TAREFAS //
-//
-// - Botão Save em SVG
-// - Bug ultima aresta colocada ao clicar no vazio
