@@ -1,0 +1,17 @@
+<html>
+<body>
+<svg height="800" width="600">
+<line x1="114.4" y1="151.2" x2="231.20000000000002" y2="360.8" style="stroke: rgb(255,0,0);stroke-width:15.0" />
+<line x1="231.20000000000002" y1="360.8" x2="305.6" y2="227.99999999999997" style="stroke: rgb(255,0,0);stroke-width:15.0" />
+<line x1="305.6" y1="227.99999999999997" x2="437.6" y2="347.20000000000005" style="stroke: rgb(255,0,0);stroke-width:15.0" />
+<line x1="437.6" y1="347.20000000000005" x2="453.6" y2="163.2" style="stroke: rgb(255,0,0);stroke-width:15.0" />
+<line x1="453.6" y1="163.2" x2="305.6" y2="227.99999999999997" style="stroke: rgb(255,0,0);stroke-width:15.0" />
+<line x1="305.6" y1="227.99999999999997" x2="114.4" y2="151.2" style="stroke: rgb(255,0,0);stroke-width:15.0" />
+<circle cx="114.4" cy="151.2" r="15.0" stroke="green" stroke-width="3.75" fill="" />
+<circle cx="453.6" cy="163.2" r="15.0" stroke="green" stroke-width="3.75" fill="" />
+<circle cx="231.20000000000002" cy="360.8" r="15.0" stroke="green" stroke-width="3.75" fill="" />
+<circle cx="437.6" cy="347.20000000000005" r="15.0" stroke="green" stroke-width="3.75" fill="" />
+<circle cx="305.6" cy="227.99999999999997" r="15.0" stroke="green" stroke-width="3.75" fill="" />
+</svg>
+</body>
+</html>

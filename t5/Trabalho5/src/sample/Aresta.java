@@ -20,4 +20,8 @@ public class Aresta {
     public Vertice getFim() {
         return fim;
     }
+
+    public Line getLinha() {
+        return linha;
+    }
 }

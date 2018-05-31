@@ -2,6 +2,7 @@ package sample;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.StrokeLineCap;
@@ -9,6 +10,13 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -29,10 +37,16 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
+import javax.imageio.ImageIO;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import java.awt.geom.Line2D;
 import javafx.stage.Modality;
+import javafx.scene.image.ImageView;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.SnapshotResult;
 
 public class GraphsEditor extends Application {
 
@@ -53,9 +67,12 @@ public class GraphsEditor extends Application {
 
         // Botões superiores //
         //
-        Button btnNew = new Button("New");
-        Button btnSave = new Button("Save");
-        Button btnExit = new Button("Exit");
+        Image imageNew = new Image("new.png");
+        Image imageSave = new Image("save.png");
+        Image imageExit = new Image("exit.png");
+        Button btnNew = new Button("New", new ImageView(imageNew));
+        Button btnSave = new Button("Save", new ImageView(imageSave));
+        Button btnExit = new Button("Exit", new ImageView(imageExit));
 
         // Botôes da esquerda //
         //
@@ -66,13 +83,21 @@ public class GraphsEditor extends Application {
         rbV.setToggleGroup(choice);
         rbA.setToggleGroup(choice);
         rbV.setSelected(true);
-        Button btnDefault = new Button("Default Size");
+        Button btnDefault = new Button("Default");
         //
         // Color Picker
+        Separator separatorColor = new Separator();
+        Separator separatorColor2 = new Separator();
+        Label colorLabel = new Label(" Cor:  Preenchimento");
+        Label colorLabel2 = new Label(" Cor:  Borda do Vértice");
         ColorPicker colorPicker = new ColorPicker();
+        ColorPicker colorPicker2 = new ColorPicker();
         colorPicker.setValue(Color.RED);
+        colorPicker2.setValue(Color.BLACK);
         //
         // Slider para grossura da linha
+        Separator separatorSlider = new Separator();
+        Label sliderLabel = new Label(" Tamanho");
         Slider slider = new Slider();
         slider.setMin(10);
         slider.setMax(25);
@@ -80,10 +105,23 @@ public class GraphsEditor extends Application {
         slider.setShowTickLabels(true);
         slider.setShowTickMarks(true);
         slider.setMajorTickUnit(3);
+        //
+        // Seleciona tipo de aresta
+        Separator separatorTipos = new Separator();
+        Label aType = new Label(" Estilo de aresta");
+        ToggleGroup tiposArestas = new ToggleGroup();
+        RadioButton normal = new RadioButton("Normal ");
+        RadioButton tracejado = new RadioButton("Tracejado ");
+        normal.setSelected(true);
+        normal.setToggleGroup(tiposArestas);
+        tracejado.setToggleGroup(tiposArestas);
+
 
         // Adiciona itens em Toolbars
+        Separator separator = new Separator();
         tbTop.getItems().addAll(btnNew, btnSave, btnExit);
-        tbLeft.getItems().addAll(rbV, rbA, colorPicker, slider,btnDefault);
+        tbLeft.getItems().addAll(rbV, rbA, separatorColor, colorLabel, colorPicker, separatorColor2, colorLabel2, colorPicker2, separatorSlider,
+                sliderLabel, btnDefault, slider, separatorTipos, aType, normal, tracejado, separator);
 
         // Textos informativos inferiores
         Separator separator1 = new Separator();
@@ -125,9 +163,8 @@ public class GraphsEditor extends Application {
                 btnYes.setFocusTraversable(false);
                 btnYes.setOnAction(new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent event) {
-                        nV.setText("0  ");
-                        nA.setText("0  ");
-                        nI.setText("0  ");
+                        grafo = new Grafo();
+                        NewGraph.close();
                         start(stage);
                     }
                 });
@@ -153,8 +190,7 @@ public class GraphsEditor extends Application {
 
         btnSave.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                //SVGPath svgPath = new SVGPath();
-                //svgPath.setContent();
+                grafo.criaSVGfile();
             }
         });
 
@@ -204,12 +240,14 @@ public class GraphsEditor extends Application {
         canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent e) {
                 if (choice.getSelectedToggle() == rbV){
-                    Circle c = new Circle(e.getX(), e.getY(), slider.getValue(), colorPicker.getValue());
-                    c.setStroke(Color.BLACK);
-                    c.setStrokeWidth(slider.getValue()/4);
-                    grafo.addVertice(c);
-                    canvas.getChildren().add(c);
-                    nV.setText(Integer.toString(grafo.getnVertices())+"  ");
+                    if (grafo.pontoVerticeValido(e.getX(), e.getY(), slider.getValue())){
+                        Circle c = new Circle(e.getX(), e.getY(), slider.getValue(), colorPicker.getValue());
+                        c.setStroke(colorPicker2.getValue());
+                        c.setStrokeWidth(slider.getValue()/4);
+                        grafo.addVertice(c);
+                        canvas.getChildren().add(c);
+                        nV.setText(Integer.toString(grafo.getnVertices())+"  ");
+                    }
                 }else{
                     if (grafo.pontoValido(e.getX(), e.getY())){
                         double xIni = grafo.buscaVertice(e.getX(), e.getY()).getCircX();
@@ -218,7 +256,10 @@ public class GraphsEditor extends Application {
                         l.setStroke(colorPicker.getValue());
                         l.setStrokeWidth(slider.getValue());
                         l.setStrokeLineCap(StrokeLineCap.ROUND);
-                        canvas.getChildren().add(l);
+                        if (tiposArestas.getSelectedToggle() == tracejado){
+                            l.getStrokeDashArray().addAll(15.0, 30.0);
+                        }
+                        canvas.getChildren().add(0,l);
                     }
                 }
             }
@@ -239,9 +280,13 @@ public class GraphsEditor extends Application {
                     if (grafo.pontoValido(e.getX(), e.getY())){
                         l.setEndX(grafo.buscaVertice(e.getX(), e.getY()).getCircX());
                         l.setEndY(grafo.buscaVertice(e.getX(), e.getY()).getCircY());
-                        grafo.addAresta(grafo.buscaVertice(l.getStartX(),l.getStartY()), grafo.buscaVertice(l.getEndX(),l.getEndY()), l);
-                        nA.setText(Integer.toString(grafo.getnArestas())+"  ");
-                        nI.setText(Integer.toString(grafo.nIntersections())+"  ");
+                        if (!(l.getStartX() == l.getEndX() && l.getStartY() == l.getEndY())){
+                            grafo.addAresta(grafo.buscaVertice(l.getStartX(),l.getStartY()), grafo.buscaVertice(l.getEndX(),l.getEndY()), l);
+                            nA.setText(Integer.toString(grafo.getnArestas())+"  ");
+                            nI.setText(Integer.toString(grafo.nIntersections())+"  ");
+                        }else{
+                            canvas.getChildren().remove(l);
+                        }
                     }else{
                         canvas.getChildren().remove(l);
                     }

@@ -4,9 +4,11 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.lang.Math;
 import java.awt.geom.Line2D;
+import java.io.PrintWriter;
 
 public class Grafo {
     public LinkedList<Vertice> vertices;
@@ -21,7 +23,7 @@ public class Grafo {
         this.nArestas = 0;
     }
 
-    // Adiciona vértice ao grafo
+    // Adiciona aresta ao grafo
     public void addAresta(Vertice v1, Vertice v2, Line l) {
         Aresta a = new Aresta(v1, v2, l);
         this.arestas.add(a);
@@ -30,7 +32,7 @@ public class Grafo {
         this.nArestas++;
     }
 
-    // Adiciona aresta ao grafo
+    // Adiciona vértice ao grafo
     public void addVertice(Circle c){
         Vertice v = new Vertice(c);
         vertices.add(v);
@@ -55,6 +57,16 @@ public class Grafo {
             }
         }
         return false;
+    }
+
+    public boolean pontoVerticeValido(double x, double y, double radius){
+        for (Vertice ref: this.vertices){
+            double distance = Math.hypot(x - ref.getCircX(), y - ref.getCircY());
+            if (distance <= radius + ref.getRadius()){
+                return false;
+            }
+        }
+        return true;
     }
 
     // Retorna vértice a partir de coordenadas x e y
@@ -82,6 +94,30 @@ public class Grafo {
             }
         }
         return cont/2;
+    }
+
+    public void criaSVGfile(){
+
+        try {
+            PrintWriter writer = new PrintWriter("resultado.svg", "UTF-8");
+            writer.println("<html>");
+            writer.println("<body>");
+            writer.println("<svg height=\"800\" width=\"600\">");
+            for (Aresta refA: this.arestas){
+                writer.println("<line x1=\""+refA.getIni().getCircX()+"\" y1=\""+refA.getIni().getCircY()+"\" x2=\""+refA.getFim().getCircX()+"\" y2=\""+refA.getFim().getCircY()+"\" style=\"stroke: rgb(255,0,0);stroke-width:"+refA.getLinha().getStrokeWidth()+"\" />");
+            }
+            for (Vertice refV: this.vertices){
+                writer.println("<circle cx=\""+refV.getCircX()+"\" cy=\""+refV.getCircY()+"\" r=\""+refV.getRadius()+"\" stroke=\"green\" stroke-width=\""+refV.getCircle().getStrokeWidth()+"\" fill=\"\" />");
+            }
+            writer.println("</svg>");
+            writer.println("</body>");
+            writer.println("</html>");
+            writer.close();
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("IndexOutOfBoundsException: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Caught IOException: " + e.getMessage());
+        }
     }
 
     public void resetN(){
