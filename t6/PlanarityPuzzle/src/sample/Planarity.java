@@ -1,10 +1,11 @@
-////////////////////////////////////////////
-//
-//   Talles Siqueira Ceolin
-//    tsceolin@inf.ufsm.br
-//  Paradigmas da Programação
-//         -UFSM-
-////////////////////////////////////
+///////////////////////////////////
+//                               //
+//    Talles Siqueira Ceolin     //
+//     tsceolin@inf.ufsm.br      //
+//   Paradigmas da Programação   //
+//            -UFSM-             //
+//                               //
+///////////////////////////////////
 
 package sample;
 
