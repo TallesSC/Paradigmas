@@ -1,0 +1,25 @@
+.hbox {
+    -fx-background-color: #E0E0E0;
+    -fx-spacing: 10;
+    -fx-border-color: #919191;
+}
+.separator .line{
+    -fx-border-width: 1;
+}
+.check-button{
+    -fx-background-image: url("btn-bg.png");
+    -fx-background-color: #05AA20;
+}
+.check-button:hover{
+    -fx-background-color: #25C740;
+}.exit-button{
+    -fx-background-image: url("btn-bg.png");
+    -fx-background-color: #D50000;
+}
+.exit-button:hover{
+    -fx-background-color: #FF1744;
+}
+.bg{
+    -fx-background-image: url("bg.png");
+    -fx-background-size: 100% 100%;
+}
