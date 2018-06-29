@@ -1,0 +1,10 @@
+.inferior{
+    -fx-spacing: 5;
+    -fx-padding: 5, 5, 5, 5;
+}
+.info-text{
+    -fx-font-size: 14px;
+}
+.table{
+    -fx-padding: 5, 5, 5, 5;
+}
